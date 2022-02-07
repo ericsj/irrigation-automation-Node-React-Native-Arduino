@@ -43,7 +43,7 @@ long irrigation_timer = 0;
 
 
 void send_irrigation_data_to_api (long moisture_before_irrigation, long current_moisture, int irrigation_time) {
-  String endpoint = "/irrigation-data";
+  String endpoint = "/irrigation-metrics";
   String data = "\"moisture_before_irrigation\":" + String(moisture_before_irrigation) + "," +
     "\"current_moisture:\"" +  String(current_moisture) + "," +
     "\"irrigation_timer:\"" +  String(irrigation_timer) + "}";
@@ -51,11 +51,11 @@ void send_irrigation_data_to_api (long moisture_before_irrigation, long current_
 //   make_http_request(endpoint, data);
 }
 
-void notify_problem_to_api (String type) {
-  String endpoint = "/irrigation-problem";
-  String data = "{\"problem_type:\"" + type + "}";
-  Serial.println("Notifying problem to api: " + data);
-//   make_http_request(endpoint, data);
+void notify_system_status (String status) {
+  String endpoint = "/system-status";
+  String payload = "{ \"status\": " + status + " }";
+  Serial.println("Notifying problem to api: " + status);
+//   make_http_request(endpoint, payload);
 }
 
 // void make_http_request(String endpoint, String data) {
@@ -145,7 +145,7 @@ void loop() {
     if (current_moisture < LOW_MOISTURE_PROBLEM_INDICATOR){
         digitalWrite(RED_LED_PIN, HIGH);
         digitalWrite(GREEN_LED_PIN, LOW);
-        notify_problem_to_api("below lower limit");
+        notify_system_status("below lower limit");
     } else {
         digitalWrite(RED_LED_PIN, LOW);
         digitalWrite(GREEN_LED_PIN, HIGH);
@@ -153,10 +153,11 @@ void loop() {
     if (current_moisture > HIGH_MOISTURE_PROBLEM_INDICATOR){
         digitalWrite(RED_LED_PIN, HIGH);
         digitalWrite(GREEN_LED_PIN, LOW);
-        notify_problem_to_api("above upper limit");
+        notify_system_status("above upper limit");
     } else {
         digitalWrite(RED_LED_PIN, LOW);
         digitalWrite(GREEN_LED_PIN, HIGH);
+        notify_system_status("");
     }
 	delay(TEST_INTERVAL * 1000);
 }
