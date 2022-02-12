@@ -1,19 +1,22 @@
 const express = require('express')
 const cors = require('cors')
-const irrigationMetrics = require('./routes/irrigation-metrics')
-const systemStatus = require('./routes/system-status')
-const { sequelize } = require('./models')
+const router = require('./routes/routes')
+const { sequelize : db } = require('./models')
 
 const app = express()
 app.use(express.json())
 app.use(cors())
+app.use('/', router)
 
-app.use('/api/irrigation-metrics', irrigationMetrics)
-app.use('/api/system-status', systemStatus)
-
-sequelize.sync().then(() => {
-  console.log('Connected with db')
+db.authenticate().then(() => {
+  console.log('Database connected...');
+}).catch(err => {
+  console.log('Error: ' + err);
 })
+
+db.sync().then(() => {
+  console.log('Db synced')
+}).catch(err => console.log("Error: " + err))
 
 app.listen(5000, () => {
   console.log('Server up and running on port 5000')

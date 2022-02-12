@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
-const configDatabase = require('./database')
+const databaseConfig = require('./database')
 
-const sequelize = new Sequelize(configDatabase)
+const db = new Sequelize(databaseConfig)
 
-module.exports = sequelize
+module.exports = db
