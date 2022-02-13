@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const router = require('./routes/routes')
 const { sequelize : db } = require('./models')
+const createInitialRecords = require('./util/createInitialRecords')
 
 const app = express()
 app.use(express.json())
@@ -16,6 +17,7 @@ db.authenticate().then(() => {
 
 db.sync().then(() => {
   console.log('Db synced')
+  createInitialRecords()
 }).catch(err => console.log("Error: " + err))
 
 app.listen(5000, () => {
