@@ -31,20 +31,16 @@ long current_time = 0;
 long irrigation_timer = 0;
 
 
-void send_irrigation_metrics_to_api (long moisture_before_irrigation, long current_moisture, int irrigation_time) {
+void send_irrigation_metrics_to_api (long moisture_before_irrigation,
+  long current_moisture, int irrigation_time, String system_status) {
   String endpoint = "/irrigation-metrics/1";
-  String data = "{ \"initialMoisture\":" + String(moisture_before_irrigation) + "," +
+  String data =
+    "{ \"initialMoisture\":" + String(moisture_before_irrigation) + "," +
     "\"finalMoisture:\"" +  String(current_moisture) + "," +
-    "\"duration:\"" +  String(irrigation_timer) + " }";
+    "\"duration:\"" +  String(irrigation_timer) + "," +
+    "{ \"status\": " + system_status + " }";
   Serial.println("Sending irrigation metrics to api: " + data);
   make_http_request(endpoint, data);
-}
-
-void notify_system_status (String status) {
-  String endpoint = "/system-status/1";
-  String payload = "{ \"status\": " + status + " }";
-  Serial.println("Notifying problem to api: " + status);
-  make_http_request(endpoint, payload);
 }
 
 void make_http_request(String endpoint, String data) {
@@ -96,6 +92,16 @@ void setup() {
   digitalWrite(GREEN_LED_PIN, HIGH);
 }
 
+void change_led_status(bool error) {
+  if (error == true) {
+    digitalWrite(RED_LED_PIN, HIGH);
+    digitalWrite(GREEN_LED_PIN, LOW);
+  } else {
+    digitalWrite(RED_LED_PIN, LOW);
+    digitalWrite(GREEN_LED_PIN, HIGH);
+  }
+}
+
 void loop() {
     moisture_before_irrigation_analog = start_moisture_mock; // analogRead(MOISTURE_SENSOR_PIN) check current moisture by Soil Moisture Sensor
     moisture_before_irrigation = map(moisture_before_irrigation_analog, 1023, 0, 0, 100); // percentage irrigation
@@ -113,24 +119,18 @@ void loop() {
         irrigation_timer = current_time - irrigation_start_time;
     }
     digitalWrite(RELAY_PIN, LOW);
-    send_irrigation_metrics_to_api(moisture_before_irrigation, current_moisture, irrigation_timer);
     if (current_moisture < LOW_MOISTURE_PROBLEM_INDICATOR){
-        digitalWrite(RED_LED_PIN, HIGH);
-        digitalWrite(GREEN_LED_PIN, LOW);
-        notify_system_status("Soil moisture below lower limit");
+        change_led_status(true);
+        send_irrigation_metrics_to_api(moisture_before_irrigation, current_moisture,
+          irrigation_timer, "Soil moisture below lower limit");
+    } else if (current_moisture > HIGH_MOISTURE_PROBLEM_INDICATOR) {
+        change_led_status(true);
+        send_irrigation_metrics_to_api(moisture_before_irrigation, current_moisture,
+          irrigation_timer, "Soil moisture above upper limit");
     } else {
-        digitalWrite(RED_LED_PIN, LOW);
-        digitalWrite(GREEN_LED_PIN, HIGH);
-        notify_system_status("");
-    }
-    if (current_moisture > HIGH_MOISTURE_PROBLEM_INDICATOR){
-        digitalWrite(RED_LED_PIN, HIGH);
-        digitalWrite(GREEN_LED_PIN, LOW);
-        notify_system_status("Soil moisture above upper limit");
-    } else {
-        digitalWrite(RED_LED_PIN, LOW);
-        digitalWrite(GREEN_LED_PIN, HIGH);
-        notify_system_status("");
+        change_led_status(false);
+        send_irrigation_metrics_to_api(moisture_before_irrigation, current_moisture,
+          irrigation_timer, "");
     }
 	delay(TEST_INTERVAL * 1000);
 }
