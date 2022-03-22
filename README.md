@@ -18,5 +18,5 @@
 
 1. You can run the project in your browser or cellphone without installing the apk. First, install Expo `npm i -g expo-cli`
 2. Go to /mobile and run `npm i`
-3. In /mobile, `expo start`
-4. In your phone install expo and read the QR code shown in terminal. Optionally, write `w` to open the app in browser.
+3. In /mobile, `expo start:web`. A preview of the app will open in your browser
+4. In your phone install expo and read the QR code shown in terminal.
