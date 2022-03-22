@@ -14,6 +14,9 @@ const irrigationMetrics = (sequelize, DataTypes) => {
     },
     finalMoisture: {
       type: DataTypes.INTEGER
+    },
+    status: {
+      type: DataTypes.STRING
     }
   })
   return IrrigationMetrics

@@ -28,7 +28,8 @@ function updateIrrigationMetrics(newIrrigationMetrics, id) {
   let updatedIrrigationMetrics = {
       duration: newIrrigationMetrics.duration,
       initialMoisture: newIrrigationMetrics.initialMoisture,
-      finalMoisture: newIrrigationMetrics.finalMoisture
+      finalMoisture: newIrrigationMetrics.finalMoisture,
+      status: newIrrigationMetrics.status
   }
   return irrigationMetrics.update(updatedIrrigationMetrics, { where: { id: id } })
 }
