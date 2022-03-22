@@ -1,3 +1,21 @@
+<h1>Irrigation automation using Arduino, Node.js, and React Native</h1>
+
+<h2>About</h2>
+This system is composed of three modules:
+
+1. An Arduino Uno device and some electronic components. The Arduino runs the c++ code contained in the file iot.cpp. This script checks irrigation moisture frequently and activates a relay for allowing irrigation during a determined time. After irrigation, it sends system status data to the API. Check components and electronics <a href='https://www.circuito.io/app?components=9442,9590,9591,11021,13322,13678,3061987'>here</a>.
+2. An API developed using Node.Js and Sequelize ORM. It allows CRUD operations to handle irrigation data.
+3. A mobile frontend built with React Native and Expo. The purpose of the mobile is to monitor if the irrigation is working and display the cause of a potential failure.
+
+<h2>Screenshots</h2>
+<h3>Mobile</h3>
+
+![ok](https://user-images.githubusercontent.com/47046552/166389949-7eec0d3f-d7c9-4ee9-89b3-79634f034833.png)![fail](https://user-images.githubusercontent.com/47046552/166390902-15d63c71-7b0a-48bc-8181-4b851aac9ff4.png)
+
+<h3>Electronic circuit</h3>
+
+![eletro](https://user-images.githubusercontent.com/47046552/166392074-3f4fc725-3e38-48ad-be42-0b538b0c9bf4.png)
+
 <h2>How to run the project</h2>
 
 1. Setup hardware project and deploy iot.cpp in the Arduino (optional)
@@ -19,4 +37,4 @@
 1. You can run the project in your browser or cellphone without installing the apk. First, install Expo `npm i -g expo-cli`
 2. Go to /mobile and run `npm i`
 3. In /mobile, `expo start:web`. A preview of the app will open in your browser
-4. In your phone install expo and read the QR code shown in terminal.
+4. On your phone install expo and read the QR code shown in terminal.

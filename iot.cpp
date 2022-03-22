@@ -23,13 +23,7 @@ long moisture_before_irrigation_analog = 0;
 int moisture_before_irrigation = 0;
 long current_moisture_analog = 0;
 int current_moisture = 0;
-
-// mocks
-long start_moisture_mock = 1000;
-long current_moisture_mock = 150;
-long current_time = 0;
 long irrigation_timer = 0;
-
 
 void send_irrigation_metrics_to_api (long moisture_before_irrigation,
   long current_moisture, int irrigation_time, String system_status) {
@@ -103,7 +97,7 @@ void change_led_status(bool error) {
 }
 
 void loop() {
-    moisture_before_irrigation_analog = start_moisture_mock; // analogRead(MOISTURE_SENSOR_PIN) check current moisture by Soil Moisture Sensor
+    moisture_before_irrigation_analog = analogRead(MOISTURE_SENSOR_PIN) check current moisture by Soil Moisture Sensor
     moisture_before_irrigation = map(moisture_before_irrigation_analog, 1023, 0, 0, 100); // percentage irrigation
     irrigation_start_time = millis();
     Serial.println("Moisture before irrigation: " + String(moisture_before_irrigation));
@@ -112,11 +106,10 @@ void loop() {
         irrigation_timer < IRRIGATION_MAX_DURATION * 1000) {
         digitalWrite(RELAY_PIN, HIGH);
         delay(IRRIGATION_TEST_DELAY);
-        current_moisture_analog = current_moisture_mock; // analogRead(MOISTURE_SENSOR_PIN) check current moisture by Soil Moisture Sensor
+        current_moisture_analog = analogRead(MOISTURE_SENSOR_PIN) check current moisture by Soil Moisture Sensor
         current_moisture = map(current_moisture_analog, 1023, 0, 0, 100);
         Serial.println("Current moisture: " + String(current_moisture));        
-        current_time = millis(); // get current timestamp
-        irrigation_timer = current_time - irrigation_start_time;
+        irrigation_timer = millis(); - irrigation_start_time;
     }
     digitalWrite(RELAY_PIN, LOW);
     if (current_moisture < LOW_MOISTURE_PROBLEM_INDICATOR){

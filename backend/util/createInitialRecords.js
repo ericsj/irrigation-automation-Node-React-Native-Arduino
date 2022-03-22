@@ -2,9 +2,9 @@ const irrigationMetricsDao = require('../dao/irrigationMetrics')
 
 const initialIrrigationMetrics = {
   duration: 10,
-  initialMoisture: 75,
+  initialMoisture: 52,
   finalMoisture: 75,
-  status: 'Irrigation took too long'
+  status: ''
 }
 
 const createInitialRecords = () => {
