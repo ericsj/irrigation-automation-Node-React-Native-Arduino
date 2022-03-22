@@ -26,7 +26,7 @@ export default function App() {
   },[])
 
   return (
-    <Container color={systemIsOk ? '#0CFF87' : '#FA7B60'}>
+    <Container color={systemIsOk ? '#0CFF87' : '#E3514B'}>
       <Title>Last irrigation data</Title>
       {irrigationData ? <IrrigationMetricsContainer>
         <CustomText>{`Initial moisture: ${irrigationData.initialMoisture}%`}</CustomText>
