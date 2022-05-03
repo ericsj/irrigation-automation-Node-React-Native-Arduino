@@ -1,4 +1,4 @@
-<h1>Irrigation automation using Arduino, Node.js, and React Native</h1>
+<h1>Irrigation automation using Node.js, React Native, and Arduino</h1>
 
 <h2>About</h2>
 This system is composed of three modules:
